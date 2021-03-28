@@ -44,14 +44,19 @@ public class ScenarioService {
 	
 	public Scenario addFile(String id, String type, MultipartFile file) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Scenario scenario = findBy(id);
-		String fileName = fileService.uploadFile(file);
+		String fileName = fileService.uploadFile(scenario, file);
 		AddFileTypeEnum fileType = AddFileTypeEnum.valueOfType(type);
 		Method method = Scenario.class.getMethod(fileType.getMethod(), String.class);
 		method.invoke(scenario, fileName);
-		return uptade(scenario);
+		return update(scenario);
 	}
 	
-	public Scenario uptade(Scenario entity) {
+	public Scenario generateTrips(String id) {
+		Scenario scenario = findBy(id);
+		return scenario;
+	}
+	
+	public Scenario update(Scenario entity) {
 		entity.setUpdated(now());
 		return scenarioRepository.save(entity);
 	}

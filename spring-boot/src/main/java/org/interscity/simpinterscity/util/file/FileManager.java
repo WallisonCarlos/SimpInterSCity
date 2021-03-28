@@ -11,6 +11,8 @@ import java.io.OutputStream;
 
 public class FileManager {
 	
+	public static final String FILE_SEPARATOR = "/";
+	
 	public static void create(File file, String content) throws IOException {		  
 		if (file.createNewFile()) {
 		    System.out.println("File is created: "+file.getName());
@@ -42,6 +44,12 @@ public class FileManager {
             }
         }
     }
+	
+	public static void createDir(File dir) {
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}		
+	}
 	
 	public static void copy(File source, File dest) throws IOException {
 	    InputStream is = null;

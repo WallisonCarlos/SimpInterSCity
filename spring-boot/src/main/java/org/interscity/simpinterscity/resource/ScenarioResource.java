@@ -44,9 +44,14 @@ public class ScenarioResource {
 		return scenarioService.addFile(id, type, file);
 	}
 	
+	@PostMapping("/generate/trips/{id}")
+	public Scenario generateTrips(@PathVariable("id") String id) {
+		return scenarioService.generateTrips(id);
+	}
+	
 	@PutMapping
 	public Scenario update(@RequestBody Scenario entity) {
-		return scenarioService.uptade(entity);
+		return scenarioService.update(entity);
 	}
 	
 	@DeleteMapping("/{id}")

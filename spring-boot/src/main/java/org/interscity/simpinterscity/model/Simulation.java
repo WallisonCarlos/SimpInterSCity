@@ -12,24 +12,20 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Scenario {
+public class Simulation {
 	
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	private String id;
-	private String name;
+	private String title;
 	private String description;
-	private String tripsFile;
-	private String mapFile;
-	private String outputFile;
-	private String metroFile;
-	private String busFile;
-	private String digitalRailsFile;
-	private String signals;
-	private String emptyDigitalRailsFile;
-	private Integer simulationTime;
+	private Scenario scenario;
 	private ZonedDateTime created;
 	private ZonedDateTime updated;
+	private ZonedDateTime buildStart;
+	private ZonedDateTime buildFinished;
+	private ZonedDateTime started;
+	private ZonedDateTime finished;
 
 }
