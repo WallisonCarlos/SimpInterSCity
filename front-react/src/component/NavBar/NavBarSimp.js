@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import {Link} from 'react-router-dom';
-import {Navbar, Nav, NavDropdown, NavLink} from 'react-bootstrap';
+import {Navbar, Nav, NavDropdown} from 'react-bootstrap';
 
 class NavBarSimp extends Component {
 
@@ -11,7 +10,7 @@ class NavBarSimp extends Component {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <Nav.Link href="#home">Home</Nav.Link>
+                    <Nav.Link href="/scenario/add">Home</Nav.Link>
                     <NavDropdown title="Simulation" id="basic-nav-dropdown">
                         <NavDropdown.Item href="#action/3.1">Create</NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.2">Show</NavDropdown.Item>
@@ -19,7 +18,7 @@ class NavBarSimp extends Component {
                         <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                     </NavDropdown>
                     <NavDropdown title="Scenario" id="basic-nav-dropdown">
-                        <NavDropdown.Item href="#action/3.1">Create</NavDropdown.Item>
+                        <NavDropdown.Item href="/scenario/add">Create</NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.2">Show</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>

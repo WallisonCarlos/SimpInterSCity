@@ -5,6 +5,7 @@ import java.time.ZonedDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,6 +21,7 @@ public class Simulation {
 	private String id;
 	private String title;
 	private String description;
+	@ManyToOne(targetEntity = Scenario.class, optional = false)
 	private Scenario scenario;
 	private ZonedDateTime created;
 	private ZonedDateTime updated;

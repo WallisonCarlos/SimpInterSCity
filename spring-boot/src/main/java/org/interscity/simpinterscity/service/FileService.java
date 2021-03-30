@@ -30,7 +30,7 @@ public class FileService {
             return fileName;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new FileStorageException("Could not store file " + file.getOriginalFilename()
+            throw new FileStorageException("Could not store file "
                 + ". Please try again!");
         }
     }

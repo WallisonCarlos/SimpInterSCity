@@ -4,6 +4,7 @@ import static java.time.ZonedDateTime.now;
 import static org.interscity.simpinterscity.util.file.FileManager.FILE_SEPARATOR;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -57,11 +58,11 @@ public class SimulationService {
 		simulation.setDescription(entity.getDescription());
 		Scenario scenario = scenarioService.findBy(entity.getScenario());
 		simulation.setScenario(scenario);
-		entity.setCreated(now());
-		return simulationRepository.save(entity);
+		simulation.setCreated(now());
+		return simulationRepository.save(simulation);
 	}
 
-	public Simulation run(KeyDTO key) {
+	public Simulation run(KeyDTO key) throws IOException, InterruptedException {
 		Simulation simulation = findBy(key.getKey());
 		String scenarioPath = smartCityModel.concat(File.separator).concat(simulation.getId());
 		FileManager.createDir(new File(scenarioPath));
@@ -76,7 +77,7 @@ public class SimulationService {
 		return update(simulation);
 	}
 
-	private void createConfigFile(Simulation simulation, String scenarioPath) {
+	private void createConfigFile(Simulation simulation, String scenarioPath) throws IOException {
 		StringBuilder content = new StringBuilder("<scsimulator_config>");
 		content.append("\t<config").append("\t\ttrip_file=\"../{{scenario}}/trips.xml\"")
 				.append("\t\tmap_file=\"../{{scenario}}/map.xml\"")
@@ -90,7 +91,7 @@ public class SimulationService {
 
 	}
 
-	private void copyScenarioFiles(String scenarioPath, Scenario scenario) {
+	private void copyScenarioFiles(String scenarioPath, Scenario scenario) throws IOException {
 		if (scenario.getTripsFile() != null) {
 			FileManager.copy(new File(scenario.getTripsFile()),
 					new File(scenarioPath.concat(File.separator).concat("trips.xml")));

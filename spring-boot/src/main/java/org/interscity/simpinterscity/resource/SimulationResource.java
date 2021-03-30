@@ -1,5 +1,6 @@
 package org.interscity.simpinterscity.resource;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.interscity.simpinterscity.dto.KeyDTO;
@@ -40,7 +41,7 @@ public class SimulationResource {
 	}
 	
 	@PostMapping("/run")
-	public Simulation run(@RequestBody KeyDTO entity) {
+	public Simulation run(@RequestBody KeyDTO entity) throws IOException, InterruptedException {
 		return simulationService.run(entity);
 	}
 	
