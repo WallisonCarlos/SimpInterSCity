@@ -36,7 +36,7 @@ class ListAllScenarioScreen extends Component {
                             <Card.Body>
                                 <Card.Title>{scenario.name}</Card.Title>
                                 <Card.Text>
-                                    Id: {scenario.id}
+                                    ID: {scenario.id}
                                     <br />
                                     Description: {scenario.description}
                                 </Card.Text>
