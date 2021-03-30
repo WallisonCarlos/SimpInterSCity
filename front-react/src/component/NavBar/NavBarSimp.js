@@ -19,9 +19,7 @@ class NavBarSimp extends Component {
                     </NavDropdown>
                     <NavDropdown title="Scenario" id="basic-nav-dropdown">
                         <NavDropdown.Item href="/scenario/add">Create</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">Show</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                        <NavDropdown.Item href="/scenario/all">Show</NavDropdown.Item>
                     </NavDropdown>
                     <NavDropdown title="Simulation Points" id="basic-nav-dropdown">
                         <NavDropdown.Item href="#action/3.1">Create</NavDropdown.Item>
