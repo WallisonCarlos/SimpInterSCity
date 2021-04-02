@@ -6,6 +6,7 @@ import CreateScenarioScreen from './view/ScenarioScreen/CreateScenarioScreen';
 import ListAllScenarioScreen from './view/ScenarioScreen/ListAllScenarioScreen';
 import CreateSimulationScreen from './view/SimulationScreen/CreateSimulationScreen';
 import ListAllSimulationScreen from './view/SimulationScreen/ListAllSimulationScreen';
+import RunSimulationScreen from './view/SimulationScreen/RunSimulationScreen';
 
 class App extends Component {
   render = () => {  
@@ -18,6 +19,7 @@ class App extends Component {
             <Route exact path="/scenario/all" component={ListAllScenarioScreen} />
             <Route exact path="/simulation/add" component={CreateSimulationScreen} />
             <Route exact path="/simulation/all" component={ListAllSimulationScreen} />
+            <Route exact path="/simulation/run/:id" component={RunSimulationScreen} />
           </Switch>
         </div>
       </div>

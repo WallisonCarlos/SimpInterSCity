@@ -1,30 +1,28 @@
 package org.interscity.simpinterscity.service;
 
 import static java.time.ZonedDateTime.now;
-import static org.interscity.simpinterscity.util.file.FileManager.FILE_SEPARATOR;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
+
+import javax.annotation.PostConstruct;
 
 import org.interscity.simpinterscity.dto.KeyDTO;
 import org.interscity.simpinterscity.dto.SimulationDTO;
 import org.interscity.simpinterscity.model.Scenario;
 import org.interscity.simpinterscity.model.Simulation;
-import org.interscity.simpinterscity.model.enumeration.AddFileTypeEnum;
-import org.interscity.simpinterscity.repository.ScenarioRepository;
 import org.interscity.simpinterscity.repository.SimulationRepository;
 import org.interscity.simpinterscity.util.file.FileManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.google.api.services.drive.Drive.Comments.Update;
+import reactor.core.publisher.DirectProcessor;
+import reactor.core.publisher.FluxProcessor;
+import reactor.core.publisher.FluxSink;
 
 @Service
 public class SimulationService {
@@ -39,6 +37,22 @@ public class SimulationService {
 	private String interSCSimulatorDir;
 	@Value("${interscsimulator.dir.smart.city.model}")
 	private String smartCityModel;
+	private FluxSink fluxSink;
+	private FluxProcessor fluxProcessor;
+
+	public SimulationService() {
+		this.fluxProcessor = DirectProcessor.create().serialize();
+		this.fluxSink = fluxProcessor.sink();
+	}
+
+	@PostConstruct
+	public void setFluxSink() {
+		runnerShellScript.setFluxSink(fluxSink);
+	}
+
+	public FluxProcessor getFluxProcessor() {
+		return fluxProcessor;
+	}
 
 	public Simulation findBy(String id) {
 		Optional<Simulation> entity = simulationRepository.findById(id);
@@ -62,6 +76,11 @@ public class SimulationService {
 		return simulationRepository.save(simulation);
 	}
 
+	public ResponseEntity<?> startServer()  throws IOException{
+		//socketService.start(8081);
+		return ResponseEntity.ok().build();
+	}
+
 	public Simulation run(KeyDTO key) throws IOException, InterruptedException {
 		Simulation simulation = findBy(key.getKey());
 		String scenarioPath = smartCityModel.concat(File.separator).concat(simulation.getId());
@@ -69,22 +88,24 @@ public class SimulationService {
 		copyScenarioFiles(scenarioPath, simulation.getScenario());
 		createConfigFile(simulation, scenarioPath);
 		simulation.setBuildStart(now());
-		runnerShellScript.runner(interSCSimulatorDir.concat(File.separator).concat("build.sh"));
+		runnerShellScript.runner("../build.sh");
 		simulation.setBuildFinished(now());
 		simulation.setStarted(now());
+		System.out.println("Running...");
 		runnerShellScript.runner(interSCSimulatorDir.concat(File.separator).concat("run.sh"), simulation.getId());
 		simulation.setFinished(now());
+		System.out.println("Runned!!");
 		return update(simulation);
 	}
 
 	private void createConfigFile(Simulation simulation, String scenarioPath) throws IOException {
 		StringBuilder content = new StringBuilder("<scsimulator_config>");
-		content.append("\t<config").append("\t\ttrip_file=\"../{{scenario}}/trips.xml\"")
-				.append("\t\tmap_file=\"../{{scenario}}/map.xml\"")
-				.append("\t\toutput_file=\"../{{scenario}}/output-{{scenario}}.xml\"")
-				.append("\t\ttraffic_signals_file=\"../{{scenario}}/signals.xml\"")
-				.append("\t\tdigital_rails_file=\"../{{scenario}}/empty-digital-rails.xml\"")
-				.append("\t\tsimulation_time=\"" + simulation.getScenario().getSimulationTime() + "\"/>")
+		content.append("\n\t<config").append("\n\t\ttrip_file=\"../{{scenario}}/trips.xml\"")
+				.append("\n\t\tmap_file=\"../{{scenario}}/map.xml\"")
+				.append("\n\t\toutput_file=\"../{{scenario}}/output-{{scenario}}.csv\"")
+				.append("\n\t\ttraffic_signals_file=\"../{{scenario}}/signals.xml\"")
+				.append("\n\t\tdigital_rails_file=\"../{{scenario}}/empty-digital-rails.xml\"")
+				.append("\n\t\tsimulation_time=\"" + simulation.getScenario().getSimulationTime() + "\"/>")
 				.append("</scsimulator_config>");
 		FileManager.create(new File(scenarioPath.concat(File.separator).concat("config.xml")),
 				content.toString().replace("{{scenario}}", simulation.getId()));
@@ -110,7 +131,7 @@ public class SimulationService {
 		}
 		if (scenario.getDigitalRailsFile() != null) {
 			FileManager.copy(new File(scenario.getDigitalRailsFile()),
-					new File(scenarioPath.concat(File.separator).concat("digital-rails.xml")));
+					new File(scenarioPath.concat(File.separator).concat("empty-digital-rails.xml")));
 		}
 		if (scenario.getEmptyDigitalRailsFile() != null) {
 			FileManager.copy(new File(scenario.getEmptyDigitalRailsFile()),

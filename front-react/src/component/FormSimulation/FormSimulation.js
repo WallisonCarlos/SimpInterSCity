@@ -53,6 +53,7 @@ class FormSimulation extends Component {
                 <Form.Group controlId="exampleForm.ControlSelect2">
                         <Form.Label>Select scenario</Form.Label>
                         <Form.Control as="select" onSelect={this.onSelectScenario} onChange={this.onSelectScenario}>
+                            <option value="" >Select a scenario</option>
                             {
                                 this.state.scenarios.map( scenario =>
                                     <option value={scenario.id} >{scenario.name}</option>

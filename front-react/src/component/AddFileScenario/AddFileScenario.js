@@ -33,6 +33,7 @@ class AddFileScenario extends Component {
                     <Form.Group controlId="exampleForm.ControlSelect2">
                         <Form.Label>Select file type</Form.Label>
                         <Form.Control as="select" onSelect={this.onSelectTypeFile} onChange={this.onSelectTypeFile}>
+                            <option value="" >Select a type file</option>
                             <option value={Constants.UPLOAD_FILE_TYPE.TRIPS} >Trips</option>
                             <option value={Constants.UPLOAD_FILE_TYPE.MAP} >Map</option>
                             <option value={Constants.UPLOAD_FILE_TYPE.SIGNAL} >Signals</option>

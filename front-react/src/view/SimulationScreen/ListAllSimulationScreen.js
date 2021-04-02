@@ -15,16 +15,20 @@ class ListAllSimulationScreen extends Component {
         this.setState({simulations: simulations});
     }
 
+    goToRun(simulationId) {
+        alert(simulationId);
+    }
+
     render() {
         return (
             <Container fluid>
                 <div>
-                    <h1>All Scenarios</h1>
+                    <h1>All Simulations</h1>
                 </div>
                 <Breadcrumb>
                     <Breadcrumb.Item href="">Home</Breadcrumb.Item>
                     <Breadcrumb.Item href="#">
-                        Simulations
+                        Simulation
                     </Breadcrumb.Item>
                     <Breadcrumb.Item active>All</Breadcrumb.Item>
                 </Breadcrumb>
@@ -43,7 +47,9 @@ class ListAllSimulationScreen extends Component {
                                     <ListGroup.Item><b>Scenario name: </b>{simulation.scenario.name}</ListGroup.Item>
                                     <ListGroup.Item><b>Scenario description: </b>{simulation.scenario.description}</ListGroup.Item>
                                 </ListGroup>
-                                <Button variant="primary">Go to Run</Button>
+                                <Button variant="success" href={"/simulation/run/"+simulation.id}>Edit</Button>
+                                <Button variant="danger" href={"/simulation/run/"+simulation.id}>Delete</Button>
+                                <Button variant="primary" href={"/simulation/run/"+simulation.id}>Go to Run</Button>
                             </Card.Body>
                         </Card>
                     )
